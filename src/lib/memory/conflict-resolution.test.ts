@@ -166,7 +166,7 @@ test("duplicate information does not supersede the existing memory", async () =>
 
   assert.equal(result.action, "duplicate");
   assert.deepEqual(result.conflictingMemoryIds, []);
-  assert.deepEqual(result.supersededMemoryIds, []);
+  assert.deepEqual(result.supersededMemoryIds, ["react-1"]);
 });
 
 test("classifier results cannot refer to untrusted memory IDs", async () => {

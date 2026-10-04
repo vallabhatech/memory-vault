@@ -16,13 +16,13 @@ export const generateAnswerWithGemma: MemoryAnswerGenerator = async (
   const model = process.env.GEMMA_MODEL;
   if (!baseUrl || !model) throw new GemmaConfigurationError();
 
-  const endpoint = new URL("chat/completions", `${baseUrl.replace(/\/+$/, "")}/`);
   const headers = new Headers({ "Content-Type": "application/json" });
   const apiKey = process.env.GEMMA_API_KEY;
   if (apiKey) headers.set("Authorization", `Bearer ${apiKey}`);
 
   let response: Response;
   try {
+    const endpoint = new URL("chat/completions", `${baseUrl.replace(/\/+$/, "")}/`);
     response = await fetch(endpoint, {
       method: "POST",
       headers,
@@ -91,8 +91,16 @@ function parseAnswer(value: unknown): GeneratedMemoryAnswer {
   if (
     !isRecord(value) ||
     typeof value.answer !== "string" ||
+    value.answer.trim().length === 0 ||
+    value.answer.length > 2_000 ||
     typeof value.confidence !== "number" ||
-    !Array.isArray(value.evidenceMemoryIds)
+    !Number.isFinite(value.confidence) ||
+    value.confidence < 0 ||
+    value.confidence > 1 ||
+    !Array.isArray(value.evidenceMemoryIds) ||
+    !value.evidenceMemoryIds.every((memoryId): memoryId is string =>
+      typeof memoryId === "string",
+    )
   ) {
     throw new MemoryAnswerGenerationError();
   }
@@ -100,7 +108,7 @@ function parseAnswer(value: unknown): GeneratedMemoryAnswer {
   const answer: GeneratedMemoryAnswer = {
     answer: value.answer,
     confidence: value.confidence,
-    evidenceMemoryIds: value.evidenceMemoryIds as string[],
+    evidenceMemoryIds: value.evidenceMemoryIds,
   };
   return answer;
 }

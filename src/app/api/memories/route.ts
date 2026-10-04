@@ -97,7 +97,10 @@ function parseInput(value: unknown): ParsedInput | null {
   const type = value.type;
   const scope = boundedString(value.scope ?? "user", 250);
   const confidence = value.confidence ?? 1;
-  const validFrom = parseDate(value.valid_from) ?? new Date().toISOString();
+  const validFrom =
+    value.valid_from === undefined
+      ? new Date().toISOString()
+      : parseDate(value.valid_from);
   if (
     !content ||
     !entity ||
@@ -107,7 +110,8 @@ function parseInput(value: unknown): ParsedInput | null {
     typeof confidence !== "number" ||
     !Number.isFinite(confidence) ||
     confidence < 0 ||
-    confidence > 1
+    confidence > 1 ||
+    !validFrom
   ) {
     return null;
   }
@@ -115,12 +119,15 @@ function parseInput(value: unknown): ParsedInput | null {
   const source = isRecord(value.source) ? value.source : {};
   const sourceType = boundedString(source.source_type ?? "conversation", 80);
   const sourceLocation = boundedString(source.source_location ?? "chat/manual", 1_000);
-  const sourceDate = parseDate(source.source_date) ?? validFrom;
+  const sourceDate =
+    source.source_date === undefined
+      ? validFrom
+      : parseDate(source.source_date);
   const originalContent = boundedString(
     source.original_content ?? content,
     maxContentLength,
   );
-  if (!sourceType || !sourceLocation || !originalContent) return null;
+  if (!sourceType || !sourceLocation || !originalContent || !sourceDate) return null;
 
   return {
     content,

@@ -37,7 +37,6 @@ export const classifyWithGemma: MemoryClassifier = async (
     throw new GemmaConfigurationError();
   }
 
-  const endpoint = new URL("chat/completions", `${baseUrl.replace(/\/+$/, "")}/`);
   const headers = new Headers({
     "Content-Type": "application/json",
   });
@@ -48,6 +47,7 @@ export const classifyWithGemma: MemoryClassifier = async (
 
   let response: Response;
   try {
+    const endpoint = new URL("chat/completions", `${baseUrl.replace(/\/+$/, "")}/`);
     response = await fetch(endpoint, {
       method: "POST",
       headers,

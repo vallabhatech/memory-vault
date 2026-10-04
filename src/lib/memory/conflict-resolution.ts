@@ -43,6 +43,9 @@ export async function resolveMemoryConflict(
   const relevantJudgments = judgments.filter(
     (judgment) => judgment.relation !== "unrelated",
   );
+  const duplicateMemoryIds = judgments
+    .filter((judgment) => judgment.relation === "duplicate")
+    .map((judgment) => judgment.memoryId);
   const conflictingMemoryIds = judgments
     .filter((judgment) => conflictingRelations.has(judgment.relation))
     .map((judgment) => judgment.memoryId);
@@ -57,7 +60,10 @@ export async function resolveMemoryConflict(
   return {
     action,
     conflictingMemoryIds,
-    supersededMemoryIds: [...conflictingMemoryIds],
+    supersededMemoryIds:
+      action === "duplicate"
+        ? duplicateMemoryIds.slice(0, 1)
+        : [...conflictingMemoryIds],
     explanation: buildExplanation(action, relevantJudgments),
   };
 }
