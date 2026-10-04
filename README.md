@@ -19,6 +19,25 @@ The scaffold uses the standard Next.js, React, TypeScript, Tailwind CSS, and ESL
 ## Routes
 
 - `/chat` - conversation workspace placeholder
+# Memory Vault
+
+Memory Vault is an AI memory layer for storing structured facts from conversations, tracking how facts change, detecting contradictions, and explaining why a current memory is considered correct.
+
+The current project includes the UI foundation and the initial Supabase schema/demo data. It does not include AI extraction, application database access, or authentication.
+
+## Stack
+
+- Next.js App Router and server routes
+- TypeScript
+- Tailwind CSS 4
+- Supabase PostgreSQL
+- Gemma as the planned language model
+- No separate Python backend
+- No authentication in the MVP
+
+## Routes
+
+- `/chat` - conversation workspace placeholder
 - `/memory` - structured memory placeholder
 - `/sources` - source provenance placeholder
 - `/` - redirects to `/chat`
@@ -28,27 +47,40 @@ The scaffold uses the standard Next.js, React, TypeScript, Tailwind CSS, and ESL
 ```text
 src/
   app/
-    (workspace)/
-      chat/page.tsx
-      memory/page.tsx
-      sources/page.tsx
-      layout.tsx
-    globals.css
-    layout.tsx
-    page.tsx
   components/
-    app-shell.tsx
-    empty-state.tsx
-    page-intro.tsx
+supabase/
+  config.toml
+  migrations/
+    20261004000000_create_memory_vault.sql
+  seed.sql
 ```
 
 The workspace route group shares the navigation shell without adding a URL segment. Route pages remain server components; only the navigation shell is a client component so it can identify the current route.
 
-## Planned architecture
+## Database
 
-For the next implementation phase, keep UI routes in `src/app`, put server-side request handlers in `src/app/api`, and isolate shared server integrations in `src/lib`. Supabase PostgreSQL should own durable conversation, source, and versioned-fact records; pgvector can be added if semantic retrieval needs it. Gemma calls should be made from server-side code, with model output validated before it changes stored memory. The database schema, API routes, model integration, and environment configuration are intentionally not part of this scaffold.
+The migration creates `public.users`, `public.sources`, and `public.memories`. Foreign keys ensure that sources and superseded memories belong to the same user as the referencing memory. Memory rows are versioned rather than deleted: each new version points to its predecessor with `supersedes`, and the prior row is marked `superseded` with an exclusive `valid_until` timestamp.
 
-## Development
+Row-level security is enabled on all three tables. Direct `anon` and `authenticated` table privileges are revoked; no client policies are added for the unauthenticated MVP. Future application access should go through server-side routes using a server-only Supabase secret key. Never expose that key to the browser.
+
+`supabase/seed.sql` inserts one stable demo user and the three source/memory records for the React, Next.js, React timeline. The demo dates are anchored to January 1, 3, and 5, 2025 so the seed is deterministic. Re-running the seed does not duplicate those records.
+
+pgvector is not enabled yet because the current schema has no embeddings or semantic retrieval logic.
+
+## Local database
+
+Install the [Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started) and Docker, then run:
+
+```bash
+supabase start
+supabase db reset
+```
+
+`db reset` recreates the local database, applies migrations, and runs the seed. It deletes existing data in that local Supabase database.
+
+To apply migrations to a linked Supabase project, authenticate and link the project first, then run `supabase db push`. This project has no linked remote database or credentials configured yet.
+
+## Application
 
 ```bash
 npm install
@@ -62,39 +94,5 @@ Open [http://localhost:3000](http://localhost:3000).
 ```bash
 npm run build
 npm run start
-```This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

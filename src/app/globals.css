@@ -4,13 +4,11 @@
   color-scheme: dark;
   --background: #0c100f;
   --surface: #111715;
-  --surface-raised: #151c19;
   --border: #252e2a;
   --foreground: #e7ece9;
   --muted: #929d97;
   --subtle: #66716b;
   --accent: #a8d5b3;
-  --accent-ink: #17221b;
 }
 
 @theme inline {
@@ -223,7 +221,7 @@ a {
 
 .page-heading {
   margin: 0;
-  font-size: clamp(25px, 3vw, 32px);
+  font-size: 30px;
   font-weight: 550;
   letter-spacing: 0;
   line-height: 1.2;
@@ -326,6 +324,10 @@ a {
   .topbar {
     min-height: 66px;
     padding: 12px 20px;
+  }
+
+  .page-heading {
+    font-size: 26px;
   }
 
   .page-content {
