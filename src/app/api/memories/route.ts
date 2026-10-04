@@ -3,10 +3,28 @@ import { GemmaConfigurationError, GemmaInferenceError } from "@/lib/memory/gemma
 import { demoUserId, addMemory, MemoryDatabaseError } from "@/lib/memory/service";
 import { memoryTypes, type MemoryType } from "@/lib/memory/types";
 import { SupabaseConfigurationError } from "@/lib/supabase/admin";
+import { getDemoMemories } from "@/lib/memory/management";
 
 export const runtime = "nodejs";
 
 const maxContentLength = 5_000;
+
+export async function GET() {
+  try {
+    const memories = await getDemoMemories();
+    return NextResponse.json({ memories });
+  } catch (error) {
+    if (error instanceof SupabaseConfigurationError) {
+      return NextResponse.json(
+        { error: "Supabase is not configured on the server." },
+        { status: 503 },
+      );
+    }
+
+    const status = error instanceof MemoryDatabaseError ? 503 : 500;
+    return NextResponse.json({ error: "Could not load memories." }, { status });
+  }
+}
 
 export async function POST(request: Request) {
   const declaredLength = Number(request.headers.get("content-length") ?? 0);
