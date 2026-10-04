@@ -8,6 +8,23 @@ export type MemorySource = {
   original_content: string;
 };
 
+export type SourceMemory = {
+  id: string;
+  content: string;
+  type: MemoryType;
+  entity: string;
+  scope: string;
+  status: MemoryStatus;
+  created_at: string;
+  valid_from: string;
+  valid_until: string | null;
+  supersedes: string | null;
+};
+
+export type ProvenanceSource = MemorySource & {
+  memories: SourceMemory[];
+};
+
 export type SupersedingMemory = {
   id: string;
   content: string;
