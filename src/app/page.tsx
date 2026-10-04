@@ -1,4 +1,8 @@
-import Image from "next/image";
+import { redirect } from "next/navigation";
+
+export default function HomePage() {
+  redirect("/chat");
+}import Image from "next/image";
 
 export default function Home() {
   return (
