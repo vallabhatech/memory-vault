@@ -67,6 +67,34 @@ Row-level security is enabled on all three tables. Direct `anon` and `authentica
 
 pgvector is not enabled yet because the current schema has no embeddings or semantic retrieval logic.
 
+## Temporal conflict resolution
+
+`POST /api/memories` accepts a memory and optional source details. The server loads active memories for the same demo user, entity, and scope, asks Gemma to classify each as new information, duplicate, contradiction, explicit supersession, or unrelated, then validates that every returned ID belongs to the candidate set. The model has no database client or write tools.
+
+For additions and supersessions, a restricted Postgres RPC performs the source insert, old-memory status/`valid_until` updates, and new active-memory insert in one transaction. It rechecks the candidate snapshot while holding a transaction lock; if another request changed it, the endpoint returns `409` and leaves the data unchanged. Duplicate submissions return the existing memory without creating another memory row.
+
+The endpoint is intentionally demo-only and unauthenticated, matching the MVP constraint. Do not expose it publicly until request authentication and rate limiting are added.
+
+`GET /api/memories/search?q=...` runs the retrieval layer independently of answer generation. The service uses PostgreSQL full-text search through a GIN-indexed generated vector, then reranks candidates using text/entity-topic relevance, recency, inferred or explicit scope, confidence, and active-versus-superseded status. Forgotten memories are excluded by the database query and again by the ranker. Retrieval weights can be overridden with `MEMORY_RETRIEVAL_WEIGHTS` as a JSON object; the default is `{ "semanticSimilarity": 0.5, "recency": 0.2, "scopeMatch": 0.1, "confidence": 0.1, "currentStatus": 0.1 }`.
+
+This PostgreSQL text-search provider is behind a `MemoryCandidateProvider` interface. When embeddings are introduced, a pgvector-backed provider can replace it without coupling retrieval to answer generation.
+
+`answerMemoryQuery(query, userId)` composes retrieval with Gemma answer generation. It supplies only selected memory evidence to the model, validates every cited memory ID against that evidence, and returns answer confidence plus source-linked evidence. Superseded rows are included only as historical context through the `supersedes` chain; forgotten rows never reach the model. If multiple active rows conflict for the same entity, the service returns an uncertainty response without asking Gemma to pick one.
+
+Use `POST /api/memories/answer` with `{ "query": "What framework are we using?" }` to call the demo answer endpoint. As with memory creation and retrieval, this endpoint is unauthenticated and must remain private until authentication and rate limiting are added.
+
+Set these server-only variables to enable requests:
+
+```text
+SUPABASE_URL=
+SUPABASE_SECRET_KEY=
+GEMMA_OPENAI_BASE_URL=http://localhost:11434/v1
+GEMMA_MODEL=gemma4:e4b
+GEMMA_API_KEY=
+```
+
+The Gemma variables target an OpenAI-compatible inference endpoint; `GEMMA_API_KEY` is optional for local inference. The secret Supabase key and any model key must never use a `NEXT_PUBLIC_` prefix.
+
 ## Local database
 
 Install the [Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started) and Docker, then run:
