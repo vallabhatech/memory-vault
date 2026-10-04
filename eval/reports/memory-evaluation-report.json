@@ -1,0 +1,816 @@
+{
+  "dataset": "Memory Vault synthetic temporal evaluation v1",
+  "synthetic": true,
+  "generatedAt": "2026-10-04T15:35:58.304Z",
+  "scenarioCount": 40,
+  "categories": [
+    "Technology decisions",
+    "Programming languages",
+    "Databases",
+    "Frameworks",
+    "Deadlines",
+    "Project requirements",
+    "User preferences",
+    "Locations",
+    "Team decisions",
+    "Reversed decisions"
+  ],
+  "evaluationMode": "offline deterministic temporal and retrieval evaluation",
+  "answerGeneration": {
+    "modelBacked": false,
+    "status": "not_evaluated",
+    "note": "Actual deterministic runner results on synthetic structured scenarios. Gemma answer generation was not invoked; current-fact and stale-memory figures are top-retrieved-value proxies, not LLM quality or production performance results."
+  },
+  "method": {
+    "baseline": "Rank dated statements by raw query/entity token overlap, break ties by recency, and select the top value without temporal status resolution.",
+    "memoryVault": "Replay transitions through the production resolveMemoryConflict and rankRelevantMemories functions, preserve superseded history, then select the highest-ranked active value.",
+    "conflictLabels": "Synthetic value labels identify duplicates, changed values, and reversals. The injected classifier uses these structured labels, so the metric evaluates state transitions, not natural-language classification.",
+    "relevanceAtK": "Precision@3 per scenario: fraction of retrieved values matching expectedCurrent, averaged over all 40 scenarios."
+  },
+  "metrics": {
+    "baseline": {
+      "currentFactAccuracy": 0.65,
+      "correctCurrentFacts": 26,
+      "totalScenarios": 40,
+      "conflictResolutionAccuracy": null,
+      "correctTransitions": null,
+      "totalTransitions": null,
+      "retrievalRelevanceAt3": 0.5833333333333336,
+      "staleMemoryErrorRate": 0.35,
+      "staleAnswers": 14
+    },
+    "memoryVault": {
+      "currentFactAccuracy": 1,
+      "correctCurrentFacts": 40,
+      "totalScenarios": 40,
+      "conflictResolutionAccuracy": 1,
+      "correctTransitions": 80,
+      "totalTransitions": 80,
+      "retrievalRelevanceAt3": 0.5541666666666669,
+      "staleMemoryErrorRate": 0,
+      "staleAnswers": 0
+    }
+  },
+  "scenarios": [
+    {
+      "id": "technology-01",
+      "category": "Technology decisions",
+      "expectedCurrent": "Valkey",
+      "baseline": {
+        "predictedCurrent": "Redis",
+        "topMemoryId": "technology-01-raw-2",
+        "relevanceAtK": 0.3333333333333333
+      },
+      "memoryVault": {
+        "predictedCurrent": "Valkey",
+        "topMemoryId": "technology-01-memory-3",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "technology-02",
+      "category": "Technology decisions",
+      "expectedCurrent": "Google Cloud",
+      "baseline": {
+        "predictedCurrent": "Google Cloud",
+        "topMemoryId": "technology-02-raw-3",
+        "relevanceAtK": 0.3333333333333333
+      },
+      "memoryVault": {
+        "predictedCurrent": "Google Cloud",
+        "topMemoryId": "technology-02-memory-3",
+        "relevanceAtK": 0.3333333333333333
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "technology-03",
+      "category": "Technology decisions",
+      "expectedCurrent": "OAuth 2.1",
+      "baseline": {
+        "predictedCurrent": "OAuth 2.1",
+        "topMemoryId": "technology-03-raw-3",
+        "relevanceAtK": 0.3333333333333333
+      },
+      "memoryVault": {
+        "predictedCurrent": "OAuth 2.1",
+        "topMemoryId": "technology-03-memory-3",
+        "relevanceAtK": 0.3333333333333333
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "technology-04",
+      "category": "Technology decisions",
+      "expectedCurrent": "Kafka",
+      "baseline": {
+        "predictedCurrent": "Kafka",
+        "topMemoryId": "technology-04-raw-1",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "Kafka",
+        "topMemoryId": "technology-04-memory-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "language-01",
+      "category": "Programming languages",
+      "expectedCurrent": "Go",
+      "baseline": {
+        "predictedCurrent": "Python",
+        "topMemoryId": "language-01-raw-1",
+        "relevanceAtK": 0.3333333333333333
+      },
+      "memoryVault": {
+        "predictedCurrent": "Go",
+        "topMemoryId": "language-01-memory-3",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "language-02",
+      "category": "Programming languages",
+      "expectedCurrent": "Rust",
+      "baseline": {
+        "predictedCurrent": "Rust",
+        "topMemoryId": "language-02-raw-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "Rust",
+        "topMemoryId": "language-02-memory-2",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "language-03",
+      "category": "Programming languages",
+      "expectedCurrent": "Bash",
+      "baseline": {
+        "predictedCurrent": "Python",
+        "topMemoryId": "language-03-raw-2",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "Bash",
+        "topMemoryId": "language-03-memory-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "language-04",
+      "category": "Programming languages",
+      "expectedCurrent": "Kotlin Multiplatform",
+      "baseline": {
+        "predictedCurrent": "Kotlin Multiplatform",
+        "topMemoryId": "language-04-raw-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "Kotlin Multiplatform",
+        "topMemoryId": "language-04-memory-2",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "database-01",
+      "category": "Databases",
+      "expectedCurrent": "PostgreSQL",
+      "baseline": {
+        "predictedCurrent": "MongoDB",
+        "topMemoryId": "database-01-raw-1",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "PostgreSQL",
+        "topMemoryId": "database-01-memory-2",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "database-02",
+      "category": "Databases",
+      "expectedCurrent": "BigQuery",
+      "baseline": {
+        "predictedCurrent": "Snowflake",
+        "topMemoryId": "database-02-raw-1",
+        "relevanceAtK": 0.3333333333333333
+      },
+      "memoryVault": {
+        "predictedCurrent": "BigQuery",
+        "topMemoryId": "database-02-memory-3",
+        "relevanceAtK": 0.3333333333333333
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "database-03",
+      "category": "Databases",
+      "expectedCurrent": "Redis",
+      "baseline": {
+        "predictedCurrent": "Redis",
+        "topMemoryId": "database-03-raw-1",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "Redis",
+        "topMemoryId": "database-03-memory-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "database-04",
+      "category": "Databases",
+      "expectedCurrent": "OpenSearch",
+      "baseline": {
+        "predictedCurrent": "OpenSearch",
+        "topMemoryId": "database-04-raw-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "OpenSearch",
+        "topMemoryId": "database-04-memory-2",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "framework-01",
+      "category": "Frameworks",
+      "expectedCurrent": "React",
+      "baseline": {
+        "predictedCurrent": "React",
+        "topMemoryId": "framework-01-raw-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "React",
+        "topMemoryId": "framework-01-memory-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "framework-02",
+      "category": "Frameworks",
+      "expectedCurrent": "Fastify",
+      "baseline": {
+        "predictedCurrent": "Express",
+        "topMemoryId": "framework-02-raw-1",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "Fastify",
+        "topMemoryId": "framework-02-memory-2",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "framework-03",
+      "category": "Frameworks",
+      "expectedCurrent": "Tailwind CSS",
+      "baseline": {
+        "predictedCurrent": "Bootstrap",
+        "topMemoryId": "framework-03-raw-1",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "Tailwind CSS",
+        "topMemoryId": "framework-03-memory-2",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "framework-04",
+      "category": "Frameworks",
+      "expectedCurrent": "Vitest",
+      "baseline": {
+        "predictedCurrent": "Vitest",
+        "topMemoryId": "framework-04-raw-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "Vitest",
+        "topMemoryId": "framework-04-memory-2",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "deadline-01",
+      "category": "Deadlines",
+      "expectedCurrent": "Monday, 2025-01-06",
+      "baseline": {
+        "predictedCurrent": "Monday, 2025-01-06",
+        "topMemoryId": "deadline-01-raw-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "Monday, 2025-01-06",
+        "topMemoryId": "deadline-01-memory-2",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "deadline-02",
+      "category": "Deadlines",
+      "expectedCurrent": "2025-01-09",
+      "baseline": {
+        "predictedCurrent": "2025-01-10",
+        "topMemoryId": "deadline-02-raw-1",
+        "relevanceAtK": 0.3333333333333333
+      },
+      "memoryVault": {
+        "predictedCurrent": "2025-01-09",
+        "topMemoryId": "deadline-02-memory-3",
+        "relevanceAtK": 0.3333333333333333
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "deadline-03",
+      "category": "Deadlines",
+      "expectedCurrent": "2025-01-14",
+      "baseline": {
+        "predictedCurrent": "2025-01-14",
+        "topMemoryId": "deadline-03-raw-2",
+        "relevanceAtK": 1
+      },
+      "memoryVault": {
+        "predictedCurrent": "2025-01-14",
+        "topMemoryId": "deadline-03-memory-1",
+        "relevanceAtK": 1
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "deadline-04",
+      "category": "Deadlines",
+      "expectedCurrent": "2025-01-12",
+      "baseline": {
+        "predictedCurrent": "2025-01-08",
+        "topMemoryId": "deadline-04-raw-1",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "2025-01-12",
+        "topMemoryId": "deadline-04-memory-2",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "requirement-01",
+      "category": "Project requirements",
+      "expectedCurrent": "CSV and JSON",
+      "baseline": {
+        "predictedCurrent": "CSV",
+        "topMemoryId": "requirement-01-raw-2",
+        "relevanceAtK": 0.3333333333333333
+      },
+      "memoryVault": {
+        "predictedCurrent": "CSV and JSON",
+        "topMemoryId": "requirement-01-memory-3",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "requirement-02",
+      "category": "Project requirements",
+      "expectedCurrent": "Required",
+      "baseline": {
+        "predictedCurrent": "Required",
+        "topMemoryId": "requirement-02-raw-2",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "Required",
+        "topMemoryId": "requirement-02-memory-2",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "requirement-03",
+      "category": "Project requirements",
+      "expectedCurrent": "WCAG 2.2 AA",
+      "baseline": {
+        "predictedCurrent": "WCAG 2.2 AA",
+        "topMemoryId": "requirement-03-raw-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "WCAG 2.2 AA",
+        "topMemoryId": "requirement-03-memory-2",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "requirement-04",
+      "category": "Project requirements",
+      "expectedCurrent": "Required",
+      "baseline": {
+        "predictedCurrent": "Required",
+        "topMemoryId": "requirement-04-raw-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "Required",
+        "topMemoryId": "requirement-04-memory-2",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "preference-01",
+      "category": "User preferences",
+      "expectedCurrent": "Detailed",
+      "baseline": {
+        "predictedCurrent": "Detailed",
+        "topMemoryId": "preference-01-raw-3",
+        "relevanceAtK": 0.3333333333333333
+      },
+      "memoryVault": {
+        "predictedCurrent": "Detailed",
+        "topMemoryId": "preference-01-memory-3",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "preference-02",
+      "category": "User preferences",
+      "expectedCurrent": "JavaScript",
+      "baseline": {
+        "predictedCurrent": "JavaScript",
+        "topMemoryId": "preference-02-raw-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "JavaScript",
+        "topMemoryId": "preference-02-memory-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "preference-03",
+      "category": "User preferences",
+      "expectedCurrent": "US month/day/year",
+      "baseline": {
+        "predictedCurrent": "US month/day/year",
+        "topMemoryId": "preference-03-raw-3",
+        "relevanceAtK": 0.3333333333333333
+      },
+      "memoryVault": {
+        "predictedCurrent": "US month/day/year",
+        "topMemoryId": "preference-03-memory-3",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "preference-04",
+      "category": "User preferences",
+      "expectedCurrent": "Daily digest",
+      "baseline": {
+        "predictedCurrent": "Immediate",
+        "topMemoryId": "preference-04-raw-1",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "Daily digest",
+        "topMemoryId": "preference-04-memory-2",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "location-01",
+      "category": "Locations",
+      "expectedCurrent": "Portland",
+      "baseline": {
+        "predictedCurrent": "Seattle",
+        "topMemoryId": "location-01-raw-1",
+        "relevanceAtK": 0.3333333333333333
+      },
+      "memoryVault": {
+        "predictedCurrent": "Portland",
+        "topMemoryId": "location-01-memory-3",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "location-02",
+      "category": "Locations",
+      "expectedCurrent": "West Europe",
+      "baseline": {
+        "predictedCurrent": "West Europe",
+        "topMemoryId": "location-02-raw-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "West Europe",
+        "topMemoryId": "location-02-memory-2",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "location-03",
+      "category": "Locations",
+      "expectedCurrent": "East US",
+      "baseline": {
+        "predictedCurrent": "East US",
+        "topMemoryId": "location-03-raw-1",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "East US",
+        "topMemoryId": "location-03-memory-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "location-04",
+      "category": "Locations",
+      "expectedCurrent": "Europe/Paris",
+      "baseline": {
+        "predictedCurrent": "Europe/Paris",
+        "topMemoryId": "location-04-raw-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "Europe/Paris",
+        "topMemoryId": "location-04-memory-2",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "team-01",
+      "category": "Team decisions",
+      "expectedCurrent": "Jordan",
+      "baseline": {
+        "predictedCurrent": "Maya",
+        "topMemoryId": "team-01-raw-1",
+        "relevanceAtK": 0.3333333333333333
+      },
+      "memoryVault": {
+        "predictedCurrent": "Jordan",
+        "topMemoryId": "team-01-memory-3",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "team-02",
+      "category": "Team decisions",
+      "expectedCurrent": "One approver",
+      "baseline": {
+        "predictedCurrent": "One approver",
+        "topMemoryId": "team-02-raw-2",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "One approver",
+        "topMemoryId": "team-02-memory-2",
+        "relevanceAtK": 1
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "team-03",
+      "category": "Team decisions",
+      "expectedCurrent": "Tuesday",
+      "baseline": {
+        "predictedCurrent": "Tuesday",
+        "topMemoryId": "team-03-raw-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "Tuesday",
+        "topMemoryId": "team-03-memory-2",
+        "relevanceAtK": 0.5
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "team-04",
+      "category": "Team decisions",
+      "expectedCurrent": "Dana",
+      "baseline": {
+        "predictedCurrent": "Dana",
+        "topMemoryId": "team-04-raw-1",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "Dana",
+        "topMemoryId": "team-04-memory-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "reversal-01",
+      "category": "Reversed decisions",
+      "expectedCurrent": "Monolith",
+      "baseline": {
+        "predictedCurrent": "Monolith",
+        "topMemoryId": "reversal-01-raw-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "Monolith",
+        "topMemoryId": "reversal-01-memory-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "reversal-02",
+      "category": "Reversed decisions",
+      "expectedCurrent": "Prisma",
+      "baseline": {
+        "predictedCurrent": "Prisma",
+        "topMemoryId": "reversal-02-raw-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "Prisma",
+        "topMemoryId": "reversal-02-memory-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "reversal-03",
+      "category": "Reversed decisions",
+      "expectedCurrent": "Trunk-based development",
+      "baseline": {
+        "predictedCurrent": "Release branches",
+        "topMemoryId": "reversal-03-raw-2",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "Trunk-based development",
+        "topMemoryId": "reversal-03-memory-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "reversal-04",
+      "category": "Reversed decisions",
+      "expectedCurrent": "v1",
+      "baseline": {
+        "predictedCurrent": "v1",
+        "topMemoryId": "reversal-04-raw-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "memoryVault": {
+        "predictedCurrent": "v1",
+        "topMemoryId": "reversal-04-memory-3",
+        "relevanceAtK": 0.6666666666666666
+      },
+      "transitions": {
+        "correct": 2,
+        "total": 2
+      }
+    }
+  ]
+}
